@@ -152,34 +152,3 @@ document.querySelector("#sub-btn").onclick = function() {
   sendTransaction(false);
 };
 
-/* * * *
-* 
-* *
-* * * Start Index DB Code
-* *
-* 
-* * * */
-
-// Open indexDB
-const request = window.indexedDB.open("budgetData", 1);
-
-// Create Object Store
-request.onupgradeneeded = ({ target }) => {
-  const db = target.result;
-  const budgetStore = db.createObjectStore("transactions", {keyPath: "listID"})
-  budgetStore.createIndex("budgetIndex", "transaction")
-
-}
-
-// Open Transaction to access the transactions objectStore and budgetIndex
-request.onsuccess = event => {
-  console.log(request.result);
-  const db = request.result
-  const transaction = db.transaction(["transactions"], "readwrite");
-  const budgetStore = transaction.objectStore("transactions")
-
-
-  // Add data to budgetStore
-  budgetStore.add( {listID: "1", expense: "200"})
-
-}
